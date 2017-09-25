@@ -1,9 +1,9 @@
 import math
-import json
-import os
+
+#Convert the raw transcription into proper .srt format
 def format_transcript(results, audio_file):
 
-    def format_time(seconds, offset=0):
+    def format_time(seconds, offset=0): #time conversion/formatting for timestamps
         frac, whole = math.modf(seconds)
         f = frac * 1000
         m, s = divmod(whole, 60)
@@ -11,16 +11,14 @@ def format_transcript(results, audio_file):
         return "%d:%02d:%02d,%03d" % (h, m, s, (f + offset * 1000))
 
 
-    # Create a function called "chunks" with two arguments, l and n:
+    """Used to break up large transcript sections to prevent multi-line subtitles"""
     def chunks(l, n):
-        # For item i in a range that is a length of l,
         for i in range(0, len(l), n):
-            # Create an index range for l of n items:
             yield l[i:i + n]
 
 
     file = open( audio_file + ".srt", "w")
-    counter = 0
+    counter = 0 # Used for numbering lines in file
 
     for result in results:
         print(result)
@@ -29,7 +27,6 @@ def format_transcript(results, audio_file):
             print(alternative)
             words = alternative.words
             print(words)
-
             if len(words) < 14:
                 transcript = alternative.transcript
                 start_time = words[0].start_time
@@ -44,8 +41,8 @@ def format_transcript(results, audio_file):
                 file.write(format_time(start_time_seconds) + ' --> ' + format_time(end_time_seconds) + '\n')
                 file.write(transcript + "\n\n")
             else:
-                c = list(chunks(words, 14))
-                for words in c:
+                chunk = list(chunks(words, 14))
+                for words in chunk:
                     start_time = words[0].start_time
                     end_time = words[-1].end_time
 
