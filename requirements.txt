@@ -53,7 +53,7 @@ protobuf==3.4.0
 pyasn1==0.3.2
 pyasn1-modules==0.0.11
 requests==2.20.0
-rsa==3.4.2
+rsa==4.1
 six==1.10.0
 tenacity==4.4.0
 urllib3==1.24.2
